@@ -14,7 +14,6 @@ bool test_grep(void);
 bool compare_files(const char *file1, const char *file2);
 
 
-
 int main(const int argc, const char* argv[]) {
     if (!check_change("test.txt")) {
         printf("Oops! you can't change test.txt!\n");

@@ -46,6 +46,7 @@ int main(const int argc, const char* argv[]) {
         printf("usage: grep pattern\n");
         exit(1);
     }
+    freopen("CON","r",stdin);
     grep(argv[1]);
     return 0;
 }
@@ -69,6 +70,7 @@ int grep(const char* pattern) {
     #define MAXLINE 1000
     char line[MAXLINE];
     // TODO
+    freopen("CON","w",stdout);
     printf("ERROR: TODO grep");
     exit(1);
 

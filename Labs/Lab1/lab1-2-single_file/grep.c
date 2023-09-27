@@ -7,7 +7,6 @@
 int getline(char line[], int max);
 int strindex(const char source[], const char searchfor[]);
 int grep(const char* pattern);
-bool check_change(const char* filename);
 bool test_getline(void);
 bool test_strindex(void);
 bool test_grep(void);
@@ -15,10 +14,6 @@ bool compare_files(const char *file1, const char *file2);
 
 
 int main(const int argc, const char* argv[]) {
-    if (!check_change("test.txt")) {
-        printf("Oops! you can't change test.txt!\n");
-        exit(1);
-    }
     if (test_getline()) {
         printf("test_getline pass\n");
     }
@@ -75,37 +70,6 @@ int grep(const char* pattern) {
     exit(1);
 
     #undef MAXLINE
-}
-
-bool check_change(const char* filename) {
-	FILE* file = fopen(filename, "r");
-	if (file == NULL) {
-		printf("no such file\n");
-        fclose(file);
-		exit(1);
-	}
-	FILETIME lastWriteTime;
-	if (!GetFileTime((HANDLE)_get_osfhandle(_fileno(file)), NULL, NULL, &lastWriteTime)) {
-        printf("get time error\n");
-        fclose(file);
-		exit(1);
-    }
-
-	FILE* time_file = fopen("time.txt", "r");
-	if (time_file == NULL) {
-		time_file = fopen("time.txt", "w");
-		fprintf(time_file, "%lu %lu\n", lastWriteTime.dwLowDateTime, lastWriteTime.dwHighDateTime);
-		fclose(time_file);
-		exit(1);
-	}
-	else {
-		DWORD dwL, dwH;
-		fscanf(time_file, "%lu %lu", &dwL, &dwH);
-		if (dwL == lastWriteTime.dwLowDateTime && dwH == lastWriteTime.dwHighDateTime) {
-			return true;
-		}
-		return false;
-	}
 }
 
 bool test_getline(void) {

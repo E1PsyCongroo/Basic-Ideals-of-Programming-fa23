@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <windows.h>
 #include <stdbool.h>
 
-bool check_change(const char* filename);
+bool check_change(const char* filename, const unsigned long long file_ascii_sum);
 
 int main(const int argc, const char* argv[]) {
-	if (!check_change("main.c")) {
+	const unsigned long long file_ascii_sum = 82740;
+	if (!check_change("main.c", file_ascii_sum)) {
 		printf("Oops! you can't change this file!\n");
 		exit(1);
 	}
-	/* This is where you came in. */
+	/* This is where you came in.G*/
 	srand(time(0));
 	int magic = rand();
 	int guess = 0;
@@ -26,33 +26,17 @@ int main(const int argc, const char* argv[]) {
 	return 0;
 }
 
-bool check_change(const char* filename) {
+bool check_change(const char* filename, const unsigned long long file_ascii_sum) {
+	unsigned long long actual_ascii_sum = 0;
+	char ch;
 	FILE* file = fopen(filename, "r");
 	if (file == NULL) {
 		printf("no such file\n");
         fclose(file);
 		exit(1);
 	}
-	FILETIME lastWriteTime;
-	if (!GetFileTime((HANDLE)_get_osfhandle(_fileno(file)), NULL, NULL, &lastWriteTime)) {
-        printf("get time error\n");
-        fclose(file);
-		exit(1);
-    }
-
-	FILE* time_file = fopen("time.txt", "r");
-	if (time_file == NULL) {
-		time_file = fopen("time.txt", "w");
-		fprintf(time_file, "%lu %lu\n", lastWriteTime.dwLowDateTime, lastWriteTime.dwHighDateTime);
-		fclose(time_file);
-		exit(1);
+	while ((ch = fgetc(file)) != EOF) {
+		actual_ascii_sum += ch;
 	}
-	else {
-		DWORD dwL, dwH;
-		fscanf(time_file, "%lu %lu", &dwL, &dwH);
-		if (dwL == lastWriteTime.dwLowDateTime && dwH == lastWriteTime.dwHighDateTime) {
-			return true;
-		}
-		return false;
-	}
+	return actual_ascii_sum == file_ascii_sum;
 }

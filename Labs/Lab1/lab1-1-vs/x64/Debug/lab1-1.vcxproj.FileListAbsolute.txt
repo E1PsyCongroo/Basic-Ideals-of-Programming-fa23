@@ -1,2 +1,0 @@
-C:\Users\Admin\Desktop\科协事务\C语言授课\lab1-1\x64\Debug\lab1-1.exe
-C:\Users\Admin\Desktop\科协事务\C语言授课\lab1\lab1-1-vs\x64\Debug\lab1-1.exe

@@ -22,7 +22,7 @@ int main(void) {
     printf("input number to chooce:\n");
     choice = getchar();
     while ((ch = getchar()) != '\n') continue;
-    switch (choice=getchar()) {
+    switch (choice) {
     case '1':
         run_game();
         break;
